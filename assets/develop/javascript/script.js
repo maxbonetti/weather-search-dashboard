@@ -18,8 +18,8 @@ const cityInput = document.getElementById(`city-name`);
 const cityDayContEl = document.getElementById(`city-day-container`);
 const cityWeekContEl = document.getElementById(`city-week-container`);
 const citySearchTerm = document.getElementById(`city-search-term`);
-const apiUrlCurrent = `api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid=0b6d015b759c89351c44e08524c52f32`;
-const apiUrlWeek = `api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid=0b6d015b759c89351c44e08524c52f32`;
+const apiUrlCurrent = `api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid={appid}`;
+const apiUrlWeek = `api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid={appid}`;
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~~~FUNCTIONS~~~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
