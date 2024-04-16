@@ -1,87 +1,141 @@
-//get global variables from markup
-//create events for city search
-//allow user to see current weather forecast
-// below display 5day weather forecast
-//allow old cities searched below search bar for better user experience
-//local storage for old cities searched
-// local storage for forecasts 
-//make sure display emoji based on weather
-//EXTRA EXTRA EXTRA
-// create light/dark mode button again
-// old cities from local storage appear in new tab instead of take over main screen
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~~~GLOBAL VARIABLES~~~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-const weatherFormEl = document.getElementById(`weahter-form`);
+const weatherFormEl = document.getElementById(`weather-form`);
+const formInputEl = document.querySelector(`.form-input`);
 const oldSearchBtns = document.getElementById(`city-buttons`);
 const cityInput = document.getElementById(`city-name`);
 const cityDayContEl = document.getElementById(`city-day-container`);
 const cityWeekContEl = document.getElementById(`city-week-container`);
 const citySearchTerm = document.getElementById(`city-search-term`);
-const apiUrlCurrent = `api.openweathermap.org/data/2.5/weather?q=${cityInput}&appid={appid}`;
-const apiUrlWeek = `api.openweathermap.org/data/2.5/forecast?q=${cityInput}&appid={appid}`;
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-//~~~~~FUNCTIONS~~~~~//
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-//function to reset the search bar and forms
-// then we want to get city forecast by fetching from the API
-// for both current and week
-//get current forecast
-// then get week forecast
-//when we get and save to local storage
-//then display current and weekly forecast
-// when we display create new HTML elements
-//then add event listeners and invoke functions
-const formSubmitHandler = function (event) {
-    event.preventDefault();
-    const cityName = cityInput.ariaValueMax.trim();
-    if (cityName) {
-        getCityForecast(cityName);
+const form = document.getElementById(`weatherForm`);
+const input = document.querySelector(`input[type="search"]`);
+const APIKey = "0b6d015b759c89351c44e08524c52f32";
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+// ~~~~~FUNCTIONS~~~~~//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+const apiUrl = `api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}`;
 
-        cityDayContEl.textContent = ``;
-        cityWeekContEl.textContent= ``;
-        cityInput.textContent= ``;
-    } else {
-        alert(`You must enter a city name.`)
-    }
-};
+
+// search info 
 //GET current weather function from API
-const getCurrentWeather = function (city) {
-    fetch(apiUrlCurrent)
-        .then(function (responseCurrent) {
-            if(responseCurrent.ok) {
-                console.log(responseCurrent);
-                responseCurrent.json().then(function (dataCurrent) {
-                    console.log(dataCurrent);
-                    displayCurrentWeather(dataCurrent, city);
-                });
-            }else {
-                alert(`Error: ${responseCurrent.statusText}`);
-            }
-        })
-        .catch(function (error) {
-            alert(`Unable to connect to OpenWeatherAPI`)
-        });
-};
-//GET week of weather forecast function from API
-const getWeeklyWeather = function (cityWeekly) {
-    fetch(apiUrlWeek)
-        .then(function (responseWeekly) {
-            if(responseWeekly.ok) {
-                console.log(responseWeekly);
-                responseWeekly.json().then(function (dataWeekly) {
-                    console.log(dataWeekly);
-                    displayWeeklyWeather(dataWeekly, city);
-                });
-            }else {
-                alert(`Error: ${responseWeekly.statusText}`);
-            }
-        })
-        .catch(function (errorWeekly) {
-            alert(`Unabale to connect to OpenWeatherAPI`)
-        });
-};
+form.addEventListener(`submit`, function(event) {
+    event.preventDefault();
+    const cityName = input.value.trim();
 
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
-//~~~~~INVOKES~~~~~//
-//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//  
+    const apiUrl = `https://api.openweathermap.org/data/2.5/weather?q=${cityName}&appid=${APIKey}&units=imperial`;
+    fetch(apiUrl).then(response => {
+        if(!response.ok){
+            throw new Error('Failed to fetch weather data.');
+        }
+        return response.json();
+    })
+    .then(data => {
+        displayCurrentWeather(data);
+    })
+    .catch(error => {
+        console.error(`Unable to connect to OpenWeatherAPI: ${error.message}.`);
+    });      
+ 
+//GET week of weather forecast function from API
+const apiUrlWeek = `https://api.openweathermap.org/data/2.5/forecast?q=${cityName}&appid=${APIKey}&units=imperial`;
+fetch(apiUrlWeek)
+    .then(respone => {
+        if(!respone.ok){
+            throw new Error(`Network Response was not ok.`);
+        }
+        return respone.json();
+    })
+    .then(data => {
+        displayWeeklyWeather(data);
+    })
+    .catch(error => {
+        console.error(`There was a problem with the Fetch Request ${error.message}.`)
+    });
+});
+//Function to save city to local storage
+
+function saveCityToLocalStorage(city) {
+    let cities = JSON.parse(localStorage.getItem('searchedCities')) || [];
+    if (!cities.includes(city)) {
+        cities.push(city);
+        localStorage.setItem('searchedCities', JSON.stringify(cities));
+        displaySearchedCities(); // Update the list of searched cities on the UI
+    }
+}
+
+//Display the  current weather forecast for city searched
+function displayCurrentWeather(weatherData) {
+    const cityName = weatherData.name;
+    const temperature = weatherData.main.temp;
+    const windSpeed = weatherData.wind.speed;
+    const humidity = weatherData.main.humidity;
+
+    const currentWeatherInfo = `
+        <h5 class="card-title">${cityName}</h5>
+        <p class="card-text">
+            <ul>
+                <li>Temperature:${temperature}*F</li>
+                <li>Humidity:${humidity}</li>
+                <li>Wind Speeds:${windSpeed}</li>
+            </ul>
+        </p>
+    `; 
+    cityDayContEl.innerHTML = currentWeatherInfo;
+    return currentWeatherInfo
+    
+};
+//Display the weekly weather forecast for city searched
+function displayWeeklyWeather(weeklyWeather) {
+    const weeklyWeatherList = weeklyWeather.list;
+    const weeklyWeatherForecast = weeklyWeatherList.filter((forecast, index) => index % 8 === 0);
+    console.log(weeklyWeatherForecast);
+
+    const weeklyCardsHtml = weeklyWeatherForecast.map(forecast => {
+        const date = new Date(forecast.dt * 1000);
+        const temperature = forecast.main.temp;
+        const weatherDesc = forecast.weather[0].description;
+    
+    const weeklyWeatherInfo = `
+    <h5 class="card-title">${date.toDateString()}</h5>
+    <p class="card-text">
+        <ul>
+            <li>Temperature:${temperature}*F</li>
+            <li>Weather:${weatherDesc}</li>
+        </ul>
+    </p>
+`;
+    return weeklyWeatherInfo
+}).join('');
+cityWeekContEl.innerHTML = weeklyCardsHtml;
+}
+
+//Function to display to local storage
+function displaySearchedCities() {
+    const cities = JSON.parse(localStorage.getItem('searchedCities')) || [];
+    const cityButtonsContainer = document.getElementById('city-buttons');
+    cityButtonsContainer.innerHTML = ''; // Clear previous buttons
+
+    // Reverse the array to display the most recent search first
+    cities.reverse().forEach(city => {
+        const cityButton = document.createElement('button');
+        cityButton.textContent = city;
+        cityButton.classList.add('btn', 'btn-secondary', 'm-1');
+        cityButton.onclick = function() {
+            input.value = city;
+            form.submit(); // Automatically search for this city again when clicked
+        };
+        cityButtonsContainer.appendChild(cityButton);
+    });
+}
+
+// Call this function on page load to display the cities
+document.addEventListener('DOMContentLoaded', displaySearchedCities);
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+// ~~~~~INVOKES~~~~~//
+// ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+document.getElementById('clearCities').addEventListener('click', function() {
+    localStorage.removeItem('searchedCities');
+    displaySearchedCities(); // Re-render the city buttons area (it will be empty now)
+});  
+

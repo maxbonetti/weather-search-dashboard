@@ -7,16 +7,15 @@
     <link rel="preconnect" href="https://fonts.googleapis.com"/>
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fira+Mono:wght@400;500;700&family=Inconsolata:wght@200..900&display=swap" rel="stylesheet"/>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.11.2/css/all.min.css"/>
-    <link rel="stylesheet" href="./css/styles.css"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" crossorigin="anonymous"/>
+    <link rel="stylesheet" href="./css/styles_dark.css"/>
     <title>Your Weather Dashboard</title>
 </head>
 <body>
     <header class="hero">
         <h1 class="app-title fira-mono-bold">
             <!-- i tag comes from the font-awesome API to make weather icon -->
-            <i class=""></i> Welcome to Weather Dashboard!
+           Welcome to Weather Dashboard!
         </h1>
         <p>Search for a city near you or a city you'll travel too for upcoming forecast!
         </p>
@@ -24,23 +23,20 @@
     <main class="flex-row justify-space-between">
         <div class="col-12 col-md-4">
     
-        <div class="card">
+        <div class="card flex">
             <h3 class="card-header text-uppercase">Search By City</h3>
-            <form id="weather-form" class="card-body">
+            <form id="weatherForm" role="search" class="card-body">
               <label class="form-label fw-bold" for="city-name">City:</label>
-              <input name="city" id="city-name" type="text" autofocus="true" class="form-input" />
+              <input name="city" id="city-name" type="search" placeholder="Search a City" class="form-control" />
               <button type="submit" class="btn btn-secondary btn-outline-light">Get Forecast</button>
             </form>
           </div>
         
 <!-- SEARCHED CITIES -->
-          <div class="card">
+          <div class="card flex">
             <h3 class="card-header text-uppercase">Your Searched Cities</h3>
             <div id="city-buttons" class="card-body">
               <!-- a search button to filter old weather searches -->
-              <button data-language="javascript" class="btn">JavaScript</button>
-              <button data-language="html" class="btn">HTML</button>
-              <button data-language="css" class="btn">CSS</button>
             </div>
           </div>
         </div>
@@ -48,12 +44,20 @@
         <div class="col-12 col-md-8">
             <h2 class="subtitle">Forecast for: <span id="city-search-term"></span></h2>
               <!-- the search forecast will appear in this div span -->
-            <div id="city-day-container" class="list-group"></div>
-            <div id="city-week-container" class="list-group"></div>
+            <div id="city-day-container" class="flex list-group"></div>
+            <h2 class="subtitle">Weekly Forecast:</h2>
+            <div id="city-week-container" class="flex list-group"></div>
           </div>
-    
-    
-    </main>
+    <!--JavaScript and JQuery  -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+    crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="https://code.jquery.com/ui/1.13.1/jquery-ui.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/dayjs@1.11.3/dayjs.min.js"
+    integrity="sha256-iu/zLUB+QgISXBLCW/mcDi/rnf4m4uEDO0wauy76x7U=" crossorigin="anonymous"></script>
+<script src="./javascript/script.js"></script>
+</main>
 
     <footer class="hero">
         <p class="justify-center">
