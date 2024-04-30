@@ -1,3 +1,6 @@
+document.addEventListener('DOMContentLoaded', () => {
+    displaySearchedCities();
+});
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 //~~~~~GLOBAL VARIABLES~~~~~//
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
@@ -15,8 +18,6 @@ const APIKey = "0b6d015b759c89351c44e08524c52f32";
 // ~~~~~FUNCTIONS~~~~~//
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 const apiUrl = `api.openweathermap.org/data/2.5/weather?q={city name}&appid={API key}`;
-
-
 // search info 
 //GET current weather function from API
 form.addEventListener(`submit`, function(event) {
@@ -128,7 +129,6 @@ function displaySearchedCities() {
         cityButtonsContainer.appendChild(cityButton);
     });
 }
-
 // Call this function on page load to display the cities
 document.addEventListener('DOMContentLoaded', displaySearchedCities);
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
