@@ -113,7 +113,7 @@ cityWeekContEl.innerHTML = weeklyCardsHtml;
 //Function to display to local storage
 function displaySearchedCities() {
     const cities = JSON.parse(localStorage.getItem('searchedCities')) || [];
-    const cityButtonsContainer = document.getElementById('city-buttons');
+    const cityButtonsContainer = document.getElementById('city-buttons');``
     cityButtonsContainer.innerHTML = ''; // Clear previous buttons
 
     // Reverse the array to display the most recent search first
